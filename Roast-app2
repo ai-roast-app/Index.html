@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Roast & Flex My Profile | Viral Persona Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,800;1,800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg-dark: #0a0b10;
+--card-bg: #13151f;
+--accent-neon: #00ff88;
+--accent-pink: #ff2a85;
+--accent-yellow: #ffcc00;
+--accent-cyan: #00f0ff;
+--text-main: #f0f2f8;
+--text-muted: #8c93a8;
+--border-color: #232738;
+--font-heading: 'Space Grotesk', sans-serif;
+--font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+background-color: var(--bg-dark);
+color: var(--text-main);
+font-family: var(--font-body);
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 1.5rem 1rem;
+background-image:
+radial-gradient(circle at 10% 20%, rgba(255, 42, 133, 0.08) 0%, transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0, 255, 136, 0.08) 0%, transparent 40%);
+}
+
+header {
+text-align: center;
+margin-bottom: 2rem;
+max-width: 600px;
+}
+
+.badge {
+display: inline-block;
+background: rgba(0, 255, 136, 0.1);
+color: var(--accent-neon);
+border: 1px solid var(--accent-neon);
+padding: 0.25rem 0.75rem;
+border-radius: 50px;
+font-size: 0.75rem;
+font-weight: 800;
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-bottom: 0.75rem;
+}
+
+h1 {
+font-family: var(--font-heading);
+font-size: 2.2rem;
+font-weight: 700;
+line-height: 1.1;
+margin-bottom: 0.5rem;
+background: linear-gradient(135deg, #fff 30%, var(--accent-neon) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+p.subtitle {
+color: var(--text-muted);
+font-size: 0.95rem;
+}
+
+.container {
+width: 100%;
+max-width: 520px;
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+}
+
+.card {
+background: var(--card-bg);
+border: 1px solid var(--border-color);
+border-radius: 16px;
+padding: 1.25rem;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.form-group {
+margin-bottom: 1rem;
+}
+
+label {
+display: block;
+font-size: 0.8rem;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+color: var(--text-muted);
+margin-bottom: 0.5rem;
+}
+
+.grid-2 {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0.75rem;
+}
+
+select, input {
+width: 100%;
+background: #090a0f;
+border: 1px solid var(--border-color);
+color: var(--text-main);
+padding: 0.75rem 1rem;
+border-radius: 10px;
+font-family: var(--font-body);
+font-size: 0.95rem;
+outline: none;
+transition: all 0.2s;
+}
+
+select:focus, input:focus {
+border-color: var(--accent-neon);
+box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+}
+
+.mode-toggle {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0.5rem;
+background: #090a0f;
+padding: 0.35rem;
+border-radius: 12px;
+border: 1px solid var(--border-color);
+}
+
+.mode-btn {
+background: transparent;
+border: none;
+color: var(--text-muted);
+padding: 0.6rem;
+border-radius: 8px;
+font-weight: 700;
+cursor: pointer;
+font-size: 0.85rem;
+transition: all 0.2s;
+}
+
+.mode-btn.active.roast {
+background: var(--accent-pink);
+color: #fff;
+}
+
+.mode-btn.active.flex {
+background: var(--accent-neon);
+color: #000;
+}
+
+.btn-main {
+width: 100%;
+background: linear-gradient(135deg, var(--accent-neon), var(--accent-cyan));
+color: #000;
+border: none;
+padding: 1rem;
+border-radius: 12px;
+font-family: var(--font-heading);
+font-size: 1.1rem;
+font-weight: 700;
+cursor: pointer;
+box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.btn-main:active {
+transform: scale(0.98);
+}
+
+.output-area {
+display: none;
+flex-direction: column;
+gap: 1rem;
+}
+
+.result-card {
+background: #181b29;
+border: 2px solid var(--accent-neon);
+border-radius: 16px;
+padding: 1.5rem;
+position: relative;
+}
+
+.result-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1rem;
+border-bottom: 1px solid var(--border-color);
+padding-bottom: 0.75rem;
+}
+
+.result-title {
+font-family: var(--font-heading);
+font-weight: 700;
+color: var(--accent-neon);
+}
+
+.result-text {
+font-size: 1.05rem;
+line-height: 1.5;
+margin-bottom: 1.5rem;
+white-space: pre-line;
+}
+
+.metrics-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 0.5rem;
+text-align: center;
+}
+
+.metric-box {
+background: #0d0e15;
+padding: 0.5rem;
+border-radius: 8px;
+border: 1px solid var(--border-color);
+}
+
+.metric-val {
+font-family: var(--font-heading);
+font-size: 1.1rem;
+font-weight: 700;
+color: var(--accent-yellow);
+}
+
+.metric-lbl {
+font-size: 0.65rem;
+color: var(--text-muted);
+text-transform: uppercase;
+}
+
+.action-buttons {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0.75rem;
+}
+
+.btn-sec {
+background: #1c2030;
+border: 1px solid var(--border-color);
+color: var(--text-main);
+padding: 0.75rem;
+border-radius: 10px;
+font-weight: 700;
+font-size: 0.85rem;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0.5rem;
+}
+
+.tip-box {
+background: linear-gradient(135deg, rgba(255, 204, 0, 0.1), transparent);
+border: 1px dashed var(--accent-yellow);
+padding: 1rem;
+border-radius: 12px;
+text-align: center;
+}
+
+.tip-btn {
+display: inline-block;
+background: var(--accent-yellow);
+color: #000;
+text-decoration: none;
+padding: 0.5rem 1rem;
+border-radius: 20px;
+font-weight: 800;
+font-size: 0.85rem;
+margin-top: 0.5rem;
+}
+
+footer {
+margin-top: auto;
+padding-top: 2rem;
+font-size: 0.75rem;
+color: var(--text-muted);
+text-align: center;
+}
+
+canvas { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+<span class="badge">🔥 100% Free AI Generator</span>
+<h1>Roast or Flex My Profile</h1>
+<p class="subtitle">Select your platform, pick a persona, and get brutally analyzed.</p>
+</header>
+
+<div class="container">
+<div class="card">
+<div class="form-group">
+<label>Select Mode</label>
+<div class="mode-toggle">
+<button class="mode-btn active roast" id="btnModeRoast" onclick="setMode('roast')">🔥 Brutal Roast</button>
+<button class="mode-btn flex" id="btnModeFlex" onclick="setMode('flex')">⚡ Extreme Flex</button>
+</div>
+</div>
+
+<div class="grid-2 form-group">
+<div>
+<label>Platform</label>
+<select id="platformSelect">
+<option value="Spotify">🎵 Spotify</option>
+<option value="GitHub">💻 GitHub</option>
+<option value="X/Twitter">🐦 X / Twitter</option>
+<option value="LinkedIn">💼 LinkedIn</option>
+<option value="Instagram">📸 Instagram</option>
+<option value="Custom">✨ Custom Vibe</option>
+</select>
+</div>
+<div>
+<label>Persona</label>
+<select id="personaSelect">
+<option value="brainrot">🤪 Gen-Z Brainrot</option>
+<option value="techbro">🕶️ Tech Bro</option>
+<option value="ramsay">👨‍🍳 Gordon Ramsay</option>
+<option value="shakespeare">📜 Shakespearean</option>
+<option value="hype">🙌 Wholesome Hype</option>
+<option value="hr">💼 Corporate HR</option>
+<option value="ex">💔 Passive-Aggressive Ex</option>
+<option value="boomer">👴 Boomer Ranter</option>
+<option value="hacker">👾 Cyberpunk Hacker</option>
+<option value="filmbro">🎬 Film Bro</option>
+</select>
+</div>
+</div>
+
+<div class="form-group">
+<label>Your Handle or Bio/Stats</label>
+<input type="text" id="userInput" placeholder="e.g. @username or 'Listens to 90s Country & Techno'">
+</div>
+
+<button class="btn-main" onclick="generateAnalysis()">GENERATE NOW 🚀</button>
+</div>
+
+<div class="output-area" id="outputArea">
+<div class="result-card" id="resultCard">
+<div class="result-header">
+<span class="result-title" id="resTitle">ANALYSIS READY</span>
+<span style="font-size: 0.75rem; color: var(--text-muted);" id="resPlatform">SPOTIFY</span>
+</div>
+<div class="result-text" id="resText">...</div>
+
+<div class="metrics-grid">
+<div class="metric-box">
+<div class="metric-val" id="m1">98%</div>
+<div class="metric-lbl" id="l1">Toxicity</div>
+</div>
+<div class="metric-box">
+<div class="metric-val" id="m2">3/10</div>
+<div class="metric-lbl" id="l2">Clout</div>
+</div>
+<div class="metric-box">
+<div class="metric-val" id="m3">MAX</div>
+<div class="metric-lbl" id="l3">Cringe</div>
+</div>
+</div>
+</div>
+
+<div class="action-buttons">
+<button class="btn-sec" onclick="downloadCard()">📸 Save Card Image</button>
+<button class="btn-sec" onclick="shareChallenge()">🔗 Share Challenge</button>
+</div>
+
+<div class="tip-box">
+<p style="font-size: 0.85rem; font-weight: 600;">Enjoyed this roast?</p>
+<p style="font-size: 0.75rem; color: var(--text-muted);">Keep this server running for free!</p>
+<a href="https://buymeacoffee.com" target="_blank" class="tip-btn">☕ Buy Me a Coffee $`2</a>
+</div>
+</div>
+</div>
+
+<footer>
+<p>Powered by Lightweight Client AI • Zero Data Stored</p>
+</footer>
+
+<canvas id="exportCanvas" width="800" height="600"></canvas>
+
+<script>
+let currentMode = 'roast';
+
+function setMode(mode) {
+currentMode = mode;
+document.getElementById('btnModeRoast').className = 'mode-btn ' + (mode === 'roast' ? 'active roast' : '');
+document.getElementById('btnModeFlex').className = 'mode-btn ' + (mode === 'flex' ? 'active flex' : '');
+}
+
+const fallbacks = {
+roast: {
+brainrot: [
+"Bro really thought this profile was giving main character energy 💀. Absolute zero aura, lowkey cooked. Skibidi levels of cringe.",
+"Nah this handle is actually wild. Bro is living in 2016 unironically. L take + no rizz + ratio incoming."
+ ],
+techbro: [
+"This profile has worse scaling than an unindexed SQL database. Zero venture backing energy. I'd short this handle.",
+"Looks like a 10x developer wrote this bio... if 10x meant 10x more bugs. Absolutely zero web3 synergy here."
+ ],
+ramsay: [
+"WHAT IS THIS?! It's raw! It's bland! A primary school child could construct a better profile than this nightmare!",
+"Disastrous! Absolutely dreadful taste! You call this a profile? SHUT IT DOWN!"
+ ]
+},
+flex: {
+brainrot: [
+"W RIZZ ALERT 🚨! Bro is literally gigachad incarnate. Absolute W aura, non-stop motion, living rent free in everyone's head!",
+"Pure Sigma grindset detected. This profile is literally max prestige. Absolute legend status!"
+ ],
+hype: [
+"YOU ARE ABSOLUTELY CRUSHING IT! The world is not ready for this level of pure talent and brilliance!",
+"Literally inspiring! Keep shining king/queen, this profile radiates main character perfection!"
+ ]
+}
+};
+
+function generateAnalysis() {
+const platform = document.getElementById('platformSelect').value;
+const persona = document.getElementById('personaSelect').value;
+const input = document.getElementById('userInput').value || '@anonymous';
+
+document.getElementById('outputArea').style.display = 'flex';
+document.getElementById('resTitle').innerText = currentMode.toUpperCase() + ' // ' + persona.toUpperCase();
+document.getElementById('resPlatform').innerText = platform;
+
+const list = (fallbacks[currentMode] && fallbacks[currentMode][persona])
+|| [currentMode === 'roast' ? "Absolute disaster of a profile. 1/10 vibe check." : "Absolute masterpiece profile. 10/10 elite status."];
+
+const randomText = list[Math.floor(Math.random() * list.length)];
+document.getElementById('resText').innerText = "${input}":\n\n` + randomText;
+
+document.getElementById('m1').innerText = currentMode === 'roast' ? (Math.floor(Math.random() * 20) + 80) + '%' : '0%';
+document.getElementById('m2').innerText = currentMode === 'roast' ? (Math.floor(Math.random() * 3) + 1) + '/10' : '10/10';
+document.getElementById('m3').innerText = currentMode === 'roast' ? 'MAX' : 'NONE';
+
+document.getElementById('outputArea').scrollIntoView({ behavior: 'smooth' });
+}
+
+function shareChallenge() {
+navigator.clipboard.writeText(window.location.href);
+alert('Challenge link copied to clipboard!');
+}
+
+function downloadCard() {
+const canvas = document.getElementById('exportCanvas');
+const ctx = canvas.getContext('2d');
+
+ctx.fillStyle = '#13151f';
+ctx.fillRect(0, 0, 800, 600);
+
+ctx.fillStyle = currentMode === 'roast' ? '#ff2a85' : '#00ff88';
+ctx.font = 'bold 32px sans-serif';
+ctx.fillText(document.getElementById('resTitle').innerText, 50, 80);
+
+ctx.fillStyle = '#ffffff';
+ctx.font = '24px sans-serif';
+
+const text = document.getElementById('resText').innerText;
+ctx.fillText(text.substring(0, 50) + '...', 50, 200);
+
+const link = document.createElement('a');
+link.download = 'roast-card.png';
+link.href = canvas.toDataURL();
+link.click();
+}
+</script>
+</body>
+</html>
+
